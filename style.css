@@ -1,3 +1,7 @@
 .remove-icon {
     cursor: pointer;
 }
+
+.todo-done {
+    text-decoration: line-through;
+}

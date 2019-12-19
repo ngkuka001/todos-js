@@ -3,12 +3,12 @@ $(document).ready(function () {
   var todos = [
     {
       id: ranDomKey(),
-      isChecked: true,
+      isChecked: false,
       name: 'Swimming'
     },
     {
       id: ranDomKey(),
-      isChecked: true,
+      isChecked: false,
       name: 'Go to School'
     },
     {
@@ -24,10 +24,10 @@ $(document).ready(function () {
     todos.map(todo => { //SEARCH:: map in js
       todosEle.append(
         `<li class='d-flex justify-content-between list-group-item' data-key=${todo.id}>
-          <span> 
-            <input type='checkbox' class='checkbox-todo' ${ (todo.isChecked ? 'checked' : '') } />
-            ${todo.name} 
-          </span>
+          <div> 
+            <input type='checkbox' class='checkbox-todo' ${ (todo.isChecked ? 'checked' : '')} />
+            <span class='todo-text ${ (todo.isChecked ? 'todo-done' : '')} '> ${todo.name} </span> 
+          </div>
           <span>
             <i class='fa fa-trash remove-icon' aria-hidden='true' />
           </span>
@@ -38,23 +38,32 @@ $(document).ready(function () {
   renderTodos();
 
   // Handle remove a todo item
-  $('.list-todo').click(function(e) {
-    if ( $(e.target).hasClass('remove-icon') ) { //Check if click icon remove
-      var key = $(e.target).closest('.list-group-item').data('key');
+  $('.list-todo').click(function (e) {
+    if ($(e.target).hasClass('remove-icon')) { //Check if click icon remove
+      var key = $(e.target)
+        .closest('.list-group-item')
+        .data('key'); //SEARCH::.data() in jquery
       todos = todos.filter(item => item.id !== key);
       renderTodos();
     }
   })
 
   // Handle click check box
-  $('.list-todo').click(function(e) {
-    if ( $(e.target).hasClass('checkbox-todo') ) { //Check if click checkbox
-      var key = $(e.target).closest('.list-group-item').data('key');
+  $('.list-todo').click(function (e) {
+    if ($(e.target).hasClass('checkbox-todo')) { //Check if click checkbox
+      var key = $(e.target)
+        .closest('.list-group-item')
+        .data('key');
       todos.map((todo, index) => {
         if (todo.id === key) {
           todos[index].isChecked = !todos[index].isChecked; //Store isChecked variable to data
         }
       })
+      var todoTextEle = $(e.target)
+        .closest('.list-group-item')
+        .find('.todo-text');
+      todoTextEle.toggleClass('todo-done');
+
     }
   })
 
@@ -70,12 +79,12 @@ $(document).ready(function () {
     if (text !== '') {
       var item = {
         id: ranDomKey(),
-        isChecked: true,
+        isChecked: false,
         name: text
       }
       todos.push(item),
-      // todosEle.empty(); //SEARCH :: empty in js
-      renderTodos(); //call function renderTodos()
+        // todosEle.empty(); //SEARCH :: empty in js
+        renderTodos(); //call function renderTodos()
     }
     inputTodo.val(''); //Clear text in input after submit
   })
